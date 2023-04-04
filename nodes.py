@@ -497,8 +497,8 @@ class EmptyLatentImage:
 
     @classmethod
     def INPUT_TYPES(s):
-        return {"required": { "width": ("INT", {"default": 512, "min": 64, "max": MAX_RESOLUTION, "step": 64}),
-                              "height": ("INT", {"default": 512, "min": 64, "max": MAX_RESOLUTION, "step": 64}),
+        return {"required": { "width": ("INT", {"default": 768, "min": 64, "max": MAX_RESOLUTION, "step": 64}),
+                              "height": ("INT", {"default": 768, "min": 64, "max": MAX_RESOLUTION, "step": 64}),
                               "batch_size": ("INT", {"default": 1, "min": 1, "max": 64})}}
     RETURN_TYPES = ("LATENT",)
     FUNCTION = "generate"
