@@ -10,17 +10,21 @@ const colorPalettes = {
 		"name": "Palette 1",
 		"colors": {
 			"node_slot": {
-				"CLIP": "#FFD500", // bright yellow
-				"CLIP_VISION": "#A8DADC", // light blue-gray
-				"CLIP_VISION_OUTPUT": "#ad7452", // rusty brown-orange
-				"CONDITIONING": "#FFA931", // vibrant orange-yellow
-				"CONTROL_NET": "#6EE7B7", // soft mint green
-				"IMAGE": "#64B5F6", // bright sky blue
-				"LATENT": "#FF9CF9", // light pink-purple
-				"MASK": "#81C784", // muted green
-				"MODEL": "#B39DDB", // light lavender-purple
-				"STYLE_MODEL": "#C2FFAE", // light green-yellow
-				"VAE": "#FF6E6E", // bright red
+				"CLIP": "#FFD500", 
+				"CLIP_VISION": "#A8DADC", 
+				"CLIP_VISION_OUTPUT": "#ad7452", 
+				"CONDITIONING": "#FFA931", 
+				"CONTROL_NET": "#6EE7B7", 
+				"IMAGE": "#64B5F6", 
+				"LATENT": "#FF9CF9", 
+				"MASK": "#81C784", 
+				"MODEL": "#B39DDB", 
+				"STYLE_MODEL": "#C2FFAE", 
+				"VAE": "#FF6E6E", 
+				"STRING": "#FF6E6E", 
+				"NUMBER": "#FF6E6E", 
+				"BOOLEAN": "#FF6E6E", 
+				"FLOAT": "#FF6E6E", 
 			}
 		}
 	},
@@ -43,7 +47,30 @@ const colorPalettes = {
 				"VAE": "#4F394F", // Loulou
 			}
 		}
-	}
+	},
+	"takoyaro_palette": {
+		"id": "takoyaro_palette",
+		"name": "Takoyaro Palette",
+		"colors": {
+			"node_slot": {
+				"CLIP": "#E8CE23", 
+				"CLIP_VISION": "#DA7822", 
+				"CLIP_VISION_OUTPUT": "#B44500", 
+				"CONDITIONING": "#9D5AE0", 
+				"CONTROL_NET": "#20E4B0", 
+				"IMAGE": "#5164DF", 
+				"LATENT": "#F76397", 
+				"MASK": "#ABA8E6", 
+				"MODEL": "#E100FF", 
+				"STYLE_MODEL": "#E0A5E3", 
+				"VAE": "#5BF656", 
+				"RAW_TEXT": "#987B89", 
+				"NUMBER": "#408994", 
+				"BOOLEAN": "#B55959", 
+				"FLOAT": "#949C47", 
+			}
+		}
+	},
 };
 
 const id = "Comfy.ColorPalette";
