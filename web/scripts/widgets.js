@@ -20,9 +20,9 @@ export function addRandomizeWidget(node, targetWidget, name, defaultValue = fals
 	randomize.afterQueued = () => {
 		if (randomize.value) {
 			if (input_type === "INT") {
-				const min = targetWidget.options?.min;
+				const min = 0;
 				let max = targetWidget.options?.max;
-				if (min != null || max != null) {
+				if (max != null) {
 					if (max) {
 						// limit max to something that javascript can handle
 						max = Math.min(1125899906842624, max);
