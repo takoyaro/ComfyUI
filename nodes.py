@@ -199,7 +199,7 @@ class CheckpointLoader:
     RETURN_TYPES = ("MODEL", "CLIP", "VAE")
     FUNCTION = "load_checkpoint"
 
-    CATEGORY = "loaders"
+    CATEGORY = "advanced/loaders"
 
     def load_checkpoint(self, config_name, ckpt_name, output_vae=True, output_clip=True):
         config_path = folder_paths.get_full_path("configs", config_name)
@@ -229,7 +229,7 @@ class unCLIPCheckpointLoader:
     RETURN_TYPES = ("MODEL", "CLIP", "VAE", "CLIP_VISION")
     FUNCTION = "load_checkpoint"
 
-    CATEGORY = "_for_testing/unclip"
+    CATEGORY = "loaders"
 
     def load_checkpoint(self, ckpt_name, output_vae=True, output_clip=True):
         ckpt_path = folder_paths.get_full_path("checkpoints", ckpt_name)
@@ -461,7 +461,7 @@ class unCLIPConditioning:
     RETURN_TYPES = ("CONDITIONING",)
     FUNCTION = "apply_adm"
 
-    CATEGORY = "_for_testing/unclip"
+    CATEGORY = "conditioning"
 
     def apply_adm(self, conditioning, clip_vision_output, strength, noise_augmentation):
         c = []
@@ -1049,7 +1049,6 @@ class ImagePadForOutpaint:
 
 NODE_CLASS_MAPPINGS = {
     "KSampler": KSampler,
-    "CheckpointLoader": CheckpointLoader,
     "CheckpointLoaderSimple": CheckpointLoaderSimple,
     "CLIPTextEncode": CLIPTextEncode,
     "CLIPSetLastLayer": CLIPSetLastLayer,
@@ -1088,6 +1087,7 @@ NODE_CLASS_MAPPINGS = {
     "VAEEncodeTiled": VAEEncodeTiled,
     "TomePatchModel": TomePatchModel,
     "unCLIPCheckpointLoader": unCLIPCheckpointLoader,
+    "CheckpointLoader": CheckpointLoader,
 }
 
 def load_custom_node(module_path):
@@ -1125,3 +1125,4 @@ def load_custom_nodes():
 def init_custom_nodes():
     load_custom_nodes()
     load_custom_node(os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), "comfy_extras"), "nodes_upscale_model.py"))
+    load_custom_node(os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), "comfy_extras"), "nodes_post_processing.py"))
