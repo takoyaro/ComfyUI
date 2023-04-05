@@ -15,7 +15,7 @@ class MathFloatInput:
 
     def exec(self, _float=0.0):
         print(f"FloatInput: {_float}")
-        return { _float }
+        return (_float,)
 
 class MathIntInput:
     def __init__(self):
@@ -34,7 +34,7 @@ class MathIntInput:
 
     def exec(self, _int=0):
         print(f"IntInput: {_int}")
-        return { _int }
+        return (_int,)
 
 NODE_CLASS_MAPPINGS = {
     "Single Float": MathFloatInput,
