@@ -12,6 +12,7 @@ class CLIPRawTextEncode:
     CATEGORY = "conditioning"
 
     def encode(self, clip, prompt,neg_prompt):
+        print(f'\nprompt: {prompt}\n\nneg_prompt: {neg_prompt}\n')
         return (
             [[clip.encode(str(prompt)), {}]],
             [[clip.encode(str(neg_prompt)), {}]]
