@@ -10,85 +10,43 @@ const colorPalettes = {
 		"name": "Palette 1",
 		"colors": {
 			"node_slot": {
-				"CLIP": "#FFD500", // bright yellow
-				"CLIP_VISION": "#A8DADC", // light blue-gray
-				"CLIP_VISION_OUTPUT": "#ad7452", // rusty brown-orange
-				"CONDITIONING": "#FFA931", // vibrant orange-yellow
-				"CONTROL_NET": "#6EE7B7", // soft mint green
-				"IMAGE": "#64B5F6", // bright sky blue
-				"LATENT": "#FF9CF9", // light pink-purple
-				"MASK": "#81C784", // muted green
-				"MODEL": "#B39DDB", // light lavender-purple
-				"STYLE_MODEL": "#C2FFAE", // light green-yellow
-				"VAE": "#FF6E6E", // bright red
-			},
-			"litegraph_base": {
-				"NODE_TITLE_COLOR": "#999",
-				"NODE_SELECTED_TITLE_COLOR": "#FFF",
-				"NODE_TEXT_SIZE": 14,
-				"NODE_TEXT_COLOR": "#AAA",
-				"NODE_SUBTEXT_SIZE": 12,
-				"NODE_DEFAULT_COLOR": "#333",
-				"NODE_DEFAULT_BGCOLOR": "#353535",
-				"NODE_DEFAULT_BOXCOLOR": "#666",
-				"NODE_DEFAULT_SHAPE": "box",
-				"NODE_BOX_OUTLINE_COLOR": "#FFF",
-				"DEFAULT_SHADOW_COLOR": "rgba(0,0,0,0.5)",
-				"DEFAULT_GROUP_FONT": 24,
-
-				"WIDGET_BGCOLOR": "#222",
-				"WIDGET_OUTLINE_COLOR": "#666",
-				"WIDGET_TEXT_COLOR": "#DDD",
-				"WIDGET_SECONDARY_TEXT_COLOR": "#999",
-
-				"LINK_COLOR": "#9A9",
-				"EVENT_LINK_COLOR": "#A86",
-				"CONNECTING_LINK_COLOR": "#AFA",
-			},
-		},
+				"CLIP": "#FFD500", 
+				"CLIP_VISION": "#A8DADC", 
+				"CLIP_VISION_OUTPUT": "#ad7452", 
+				"CONDITIONING": "#FFA931", 
+				"CONTROL_NET": "#6EE7B7", 
+				"IMAGE": "#64B5F6", 
+				"LATENT": "#FF9CF9", 
+				"MASK": "#81C784", 
+				"MODEL": "#B39DDB", 
+				"STYLE_MODEL": "#C2FFAE", 
+				"VAE": "#FF6E6E", 
+				"STRING": "#FF6E6E", 
+				"NUMBER": "#FF6E6E", 
+				"BOOLEAN": "#FF6E6E", 
+				"FLOAT": "#FF6E6E", 
+			}
+		}
 	},
 	"solarized": {
 		"id": "solarized",
 		"name": "Solarized",
 		"colors": {
 			"node_slot": {
-				"CLIP": "#859900", // Green
-				"CLIP_VISION": "#6c71c4", // Indigo
-				"CLIP_VISION_OUTPUT": "#859900", // Green
-				"CONDITIONING": "#d33682", // Magenta
-				"CONTROL_NET": "#cb4b16", // Orange
-				"IMAGE": "#dc322f", // Red
-				"LATENT": "#268bd2", // Blue
-				"MASK": "#073642", // Base02
-				"MODEL": "#cb4b16", // Orange
-				"STYLE_MODEL": "#073642", // Base02
-				"UPSCALE_MODEL": "#6c71c4", // Indigo
-				"VAE": "#586e75", // Base1
-			},
-			"litegraph_base": {
-				"NODE_TITLE_COLOR": "#fdf6e3",
-				"NODE_SELECTED_TITLE_COLOR": "#b58900",
-				"NODE_TEXT_SIZE": 14,
-				"NODE_TEXT_COLOR": "#657b83",
-				"NODE_SUBTEXT_SIZE": 12,
-				"NODE_DEFAULT_COLOR": "#586e75",
-				"NODE_DEFAULT_BGCOLOR": "#073642",
-				"NODE_DEFAULT_BOXCOLOR": "#839496",
-				"NODE_DEFAULT_SHAPE": "box",
-				"NODE_BOX_OUTLINE_COLOR": "#fdf6e3",
-				"DEFAULT_SHADOW_COLOR": "rgba(0,0,0,0.5)",
-				"DEFAULT_GROUP_FONT": 24,
-
-				"WIDGET_BGCOLOR": "#002b36",
-				"WIDGET_OUTLINE_COLOR": "#839496",
-				"WIDGET_TEXT_COLOR": "#fdf6e3",
-				"WIDGET_SECONDARY_TEXT_COLOR": "#93a1a1",
-
-				"LINK_COLOR": "#2aa198",
-				"EVENT_LINK_COLOR": "#268bd2",
-				"CONNECTING_LINK_COLOR": "#859900",
-			},
-		},
+				"CLIP": "#556B2F", // Dark Olive Green
+				"CLIP_VISION": "#4B0082", // Indigo
+				"CLIP_VISION_OUTPUT": "#006400", // Green
+				"CONDITIONING": "#FF1493", // Deep Pink
+				"CONTROL_NET": "#8B4513", // Saddle Brown
+				"IMAGE": "#8B0000", // Dark Red
+				"LATENT": "#00008B", // Dark Blue
+				"MASK": "#2F4F4F", // Dark Slate Grey
+				"MODEL": "#FF8C00", // Dark Orange
+				"STYLE_MODEL": "#004A4A", // Sherpa Blue
+				"UPSCALE_MODEL": "#4A004A", // Tyrian Purple
+				"VAE": "#4F394F", // Loulou
+			}
+		}
 	}
 };
 
