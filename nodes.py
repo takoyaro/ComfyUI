@@ -9,6 +9,8 @@ import traceback
 from PIL import Image
 from PIL.PngImagePlugin import PngInfo
 import numpy as np
+from safetensors import safe_open
+
 
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "comfy"))
@@ -284,7 +286,8 @@ class LoraLoader:
                               "strength_model": ("FLOAT", {"default": 1.0, "min": -10.0, "max": 10.0, "step": 0.01}),
                               "strength_clip": ("FLOAT", {"default": 1.0, "min": -10.0, "max": 10.0, "step": 0.01}),
                               }}
-    RETURN_TYPES = ("MODEL", "CLIP")
+    RETURN_TYPES = ("MODEL", "CLIP","BOOL", "RAW_TEXT",)
+    RETURN_NAMES = ("model_lora", "clip_lora", "isV2", "tags")
     FUNCTION = "load_lora"
 
     CATEGORY = "loaders"
@@ -292,7 +295,15 @@ class LoraLoader:
     def load_lora(self, model, clip, lora_name, strength_model, strength_clip):
         lora_path = folder_paths.get_full_path("loras", lora_name)
         model_lora, clip_lora = comfy.sd.load_lora_for_models(model, clip, lora_path, strength_model, strength_clip)
-        return (model_lora, clip_lora)
+        metadata = safe_open(lora_path, framework="pt", device="mps").metadata()
+        isV2 = metadata["ss_v2"];
+        tags = json.loads(metadata["ss_tag_frequency"])
+        concept_keys = list(tags.keys())
+        first_concept = concept_keys[0]
+        first_concept_tags = tags[first_concept]
+        first_concept_tag_keys = list(first_concept_tags.keys())
+        most_common_tag = first_concept_tag_keys[0]
+        return (model_lora, clip_lora, isV2, most_common_tag)
 
 class TomePatchModel:
     @classmethod
