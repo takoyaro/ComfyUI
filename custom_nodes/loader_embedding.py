@@ -21,7 +21,7 @@ class EmbeddingLoader:
 
     def load_embedding(self, embedding_name,strength):
 
-        return (f'embedding:{embedding_name}:{strength}',)
+        return (f'(embedding:{embedding_name}):{strength}',)
 
 NODE_CLASS_MAPPINGS = {
     "EmbeddingLoader": EmbeddingLoader,
