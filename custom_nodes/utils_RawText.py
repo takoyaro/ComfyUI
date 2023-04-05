@@ -39,7 +39,7 @@ class RawTextCombine:
     CATEGORY = "utils"
 
     def combine(self, raw_text_1, raw_text_2):
-        return (raw_text_1 + " " + raw_text_2, )
+        return (raw_text_1 + ", " + raw_text_2, )
     
 class RawTextReplace:
     @classmethod
