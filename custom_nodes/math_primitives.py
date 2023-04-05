@@ -1,4 +1,4 @@
-class FloatInput:
+class MathFloatInput:
     def __init__(self):
         pass
     
@@ -17,7 +17,7 @@ class FloatInput:
         print(f"FloatInput: {_float}")
         return { _float }
 
-class IntInput:
+class MathIntInput:
     def __init__(self):
         pass
 
@@ -37,6 +37,6 @@ class IntInput:
         return { _int }
 
 NODE_CLASS_MAPPINGS = {
-    "FloatInput": FloatInput,
-    "IntInput": IntInput,
+    "Single Float": MathFloatInput,
+    "Single Integer": MathIntInput,
 }
