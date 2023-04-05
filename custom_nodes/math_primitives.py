@@ -23,8 +23,10 @@ class MathIntInput:
 
     @classmethod
     def INPUT_TYPES(s):
+        max_int = 0xffffffffffffffff
+        two_complement = max_int ^ max_int + 1
         return {"required": 
-                    {"_int": ("INT", {"default": 0, "step": 1})},
+                    {"_int": ("INT", {"default": 0, "min":-two_complement, "max": max_int})},
         }
 
     RETURN_TYPES = ("INT",)
