@@ -44,6 +44,10 @@ export function addRandomizeWidget(node, targetWidget, name, defaultValue = fals
 			else if (input_type == "BOOL") {
 				targetWidget.value = Math.random() > 0.5;
 			}
+			else if (input_type == "COMBO"){
+				const arr = targetWidget.options.values;
+				targetWidget.value = arr[Math.floor(Math.random() * arr.length)];
+			}
 			
 		}
 	};
@@ -224,7 +228,6 @@ export const ComfyWidgets = {
 	"INT:noise_seed": seedWidget,
 	"INT:_int": seedWidget,
 	"FLOAT:_float": randomFloatWidget,
-	
 	FLOAT(node, inputName, inputData) {
 		const { val, config } = getNumberDefaults(inputData, 0.5);
 		return { widget: node.addWidget("number", inputName, val, () => {}, config) };
@@ -256,12 +259,19 @@ export const ComfyWidgets = {
 		}
 	},
 	COMBO(node, inputName, inputData) {
+		
 		const type = inputData[0];
 		let defaultValue = type[0];
 		if (inputData[1] && inputData[1].default) {
 			defaultValue = inputData[1].default;
 		}
-		return { widget: node.addWidget("combo", inputName, defaultValue, () => {}, { values: type }) };
+		console.log("COMBO IS ", inputName, inputData);
+		const targetWidget = { widget: node.addWidget("combo", inputName, defaultValue, () => {}, { values: type }) };
+
+		const randomize = addRandomizeWidget(node, targetWidget.widget, "Randomize after every gen", true, "COMBO");
+
+		targetWidget.widget.linkedWidgets = [randomize];
+		return { widget: targetWidget, randomize };
 	},
 	IMAGEUPLOAD(node, inputName, inputData, app) {
 		const imageWidget = node.widgets.find((w) => w.name === "image");
