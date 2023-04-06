@@ -9,14 +9,14 @@ class DescribeCharacter:
     def INPUT_TYPES():
         return {
             "required": {
-                "age": (["random","child","teenager","young adult","adult","middle-aged","elderly"], ),
-                "gender": (["random","male","female"], ),
-                "eye_color": (["random","blue","brown","green","hazel","amber","gray","black","red","violet","pink","purple","yellow"], ),
-                "hair_color": (["random","blonde","brown","black","red","gray","white","blue","green","pink","purple","yellow","orange","violet"], ),
-                "hair_length": (["random","short","medium","long"], ),
-                "hair_style": (["random","bald","bun","ponytail","curly","straight","wavy","braided","mohawk","pixie","afro","bob","bangs","ponytail","braid","dreadlocks","mullet","side part","top knot","undercut","bowl cut","butterfly","cornrows","dutch braid","fishtail braid","french braid","half up","half down","high ponytail"], ),
-                "body_type": (["random","slim","average","athletic","curvy","chubby","overweight","obese"], ),
-                "ethnicity": (["random","white","black","japanese","korean","chinese","indonesian","hispanic","middle eastern","indian","native american","pacific islander"], ),
+                "age": (["child","teenager","young adult","adult","middle-aged","elderly"], ),
+                "gender": (["male","female"], ),
+                "eye_color": (["blue","brown","green","hazel","amber","gray","black","red","violet","pink","purple","yellow"], ),
+                "hair_color": (["blonde","brown","black","red","gray","white","blue","green","pink","purple","yellow","orange","violet"], ),
+                "hair_length": (["short","medium","long"], ),
+                "hair_style": (["bald","bun","ponytail","curly","straight","wavy","braided","mohawk","pixie","afro","bob","bangs","ponytail","braid","dreadlocks","mullet","side part","top knot","undercut","bowl cut","butterfly","cornrows","dutch braid","fishtail braid","french braid","half up","half down","high ponytail"], ),
+                "body_type": (["slim","average","athletic","curvy","chubby","overweight","obese"], ),
+                "ethnicity": (["white","black","japanese","korean","chinese","indonesian","hispanic","middle eastern","indian","native american","pacific islander"], ),
                 "safety": (["sfw","nsfw"], ),
             }
         }
@@ -38,8 +38,6 @@ class DescribeCharacter:
         ethnicities = ["white","black","japanese","korean","chinese","indonesian","hispanic","middle eastern","indian","native american","pacific islander"]
 
         #age
-        if age == "random":
-            age = random.choice(ages)
         positive_prompt.append(age)
         ages.remove(age)
         negative_prompt.append(" ".join(ages))
@@ -56,43 +54,31 @@ class DescribeCharacter:
             negative_prompt.append("male, multiple people,multiple subjects")
         
         #eye color
-        if eye_color == "random":
-            eye_color = random.choice(eye_colors)
         positive_prompt.append(f'with {eye_color} eyes')
         eye_colors.remove(eye_color)
         negative_prompt.append(" ".join(eye_colors))
 
         #hair length
-        if hair_length == "random":
-            hair_length = random.choice(hair_lengths)
         positive_prompt.append(f'and {hair_length}')
         hair_lengths.remove(hair_length)
         negative_prompt.append(" hair,".join(hair_lengths))
 
         #hair color
-        if hair_color == "random":
-            hair_color = random.choice(hair_colors)
         positive_prompt.append(hair_color)
         hair_colors.remove(hair_color)
         negative_prompt.append("-colored hair,".join(hair_colors))
 
         #hair style
-        if hair_style == "random":
-            hair_style = random.choice(hair_styles)
         positive_prompt.append(f'{hair_style} hair')
         hair_styles.remove(hair_style)
         negative_prompt.append("-styled hair, ".join(hair_styles))
 
         #body type
-        if body_type == "random":
-            body_type = random.choice(body_types)
         positive_prompt.append(f'and a {body_type} body')
         body_types.remove(body_type)
         negative_prompt.append(" body,".join(body_types))
 
         #ethnicity
-        if ethnicity == "random":
-            ethnicity = random.choice(ethnicities)
         positive_prompt.append(f'of {ethnicity} descent')
         ethnicities.remove(ethnicity)
         negative_prompt.append(",".join(ethnicities))
