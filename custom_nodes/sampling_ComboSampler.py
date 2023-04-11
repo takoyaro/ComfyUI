@@ -28,10 +28,10 @@ def common_ksampler(model, seed, steps, cfg, sampler_name, scheduler, positive, 
     real_model = model.model
 
     noise = noise.to(device)
-    noise2 = noise.to(device)
+    noise2 = noise2.to(device)
 
     latent_image = latent_image.to(device)
-    latent_image2 = latent_image.to(device)
+    latent_image2 = latent_image2.to(device)
 
     positive_copy = []
     negative_copy = []
