@@ -5,9 +5,9 @@ import { api } from "/scripts/api.js";
 // Manage color palettes
 
 const colorPalettes = {
-	"palette_1": {
-		"id": "palette_1",
-		"name": "Palette 1",
+	"dark": {
+		"id": "dark",
+		"name": "Dark (Default)",
 		"colors": {
 			"node_slot": {
 				"CLIP": "#FFD500", 
@@ -26,6 +26,70 @@ const colorPalettes = {
 				"BOOLEAN": "#FF6E6E", 
 				"FLOAT": "#FF6E6E", 
 			}
+			"comfy_base": {
+				"fg-color": "#fff",
+				"bg-color": "#202020",
+				"comfy-menu-bg": "#353535",
+				"comfy-input-bg": "#222",
+				"input-text": "#ddd",
+				"descrip-text": "#999",
+				"drag-text": "#ccc",
+				"error-text": "#ff4444",
+				"border-color": "#4e4e4e"
+			}
+		},
+	},
+	"light": {
+		"id": "light",
+		"name": "Light",
+		"colors": {
+			"node_slot": {
+				"CLIP": "#FFA726", // orange
+				"CLIP_VISION": "#5C6BC0", // indigo
+				"CLIP_VISION_OUTPUT": "#8D6E63", // brown
+				"CONDITIONING": "#EF5350", // red
+				"CONTROL_NET": "#66BB6A", // green
+				"IMAGE": "#42A5F5", // blue
+				"LATENT": "#AB47BC", // purple
+				"MASK": "#9CCC65", // light green
+				"MODEL": "#7E57C2", // deep purple
+				"STYLE_MODEL": "#D4E157", // lime
+				"VAE": "#FF7043", // deep orange
+			},
+			"litegraph_base": {
+				"NODE_TITLE_COLOR": "#222",
+				"NODE_SELECTED_TITLE_COLOR": "#000",
+				"NODE_TEXT_SIZE": 14,
+				"NODE_TEXT_COLOR": "#444",
+				"NODE_SUBTEXT_SIZE": 12,
+				"NODE_DEFAULT_COLOR": "#F7F7F7",
+				"NODE_DEFAULT_BGCOLOR": "#F5F5F5",
+				"NODE_DEFAULT_BOXCOLOR": "#CCC",
+				"NODE_DEFAULT_SHAPE": "box",
+				"NODE_BOX_OUTLINE_COLOR": "#000",
+				"DEFAULT_SHADOW_COLOR": "rgba(0,0,0,0.1)",
+				"DEFAULT_GROUP_FONT": 24,
+
+				"WIDGET_BGCOLOR": "#D4D4D4",
+				"WIDGET_OUTLINE_COLOR": "#999",
+				"WIDGET_TEXT_COLOR": "#222",
+				"WIDGET_SECONDARY_TEXT_COLOR": "#555",
+
+				"LINK_COLOR": "#4CAF50",
+				"EVENT_LINK_COLOR": "#FF9800",
+				"CONNECTING_LINK_COLOR": "#2196F3",
+			},
+			"comfy_base": {
+				"fg-color": "#222",
+				"bg-color": "#DDD",
+				"comfy-menu-bg": "#F5F5F5",
+				"comfy-input-bg": "#C9C9C9",
+				"input-text": "#222",
+				"descrip-text": "#444",
+				"drag-text": "#555",
+				"error-text": "#F44336",
+				"border-color": "#888"
+			}
 		}
 	},
 	"solarized": {
@@ -33,49 +97,60 @@ const colorPalettes = {
 		"name": "Solarized",
 		"colors": {
 			"node_slot": {
-				"CLIP": "#556B2F", // Dark Olive Green
-				"CLIP_VISION": "#4B0082", // Indigo
-				"CLIP_VISION_OUTPUT": "#006400", // Green
-				"CONDITIONING": "#FF1493", // Deep Pink
-				"CONTROL_NET": "#8B4513", // Saddle Brown
-				"IMAGE": "#8B0000", // Dark Red
-				"LATENT": "#00008B", // Dark Blue
-				"MASK": "#2F4F4F", // Dark Slate Grey
-				"MODEL": "#FF8C00", // Dark Orange
-				"STYLE_MODEL": "#004A4A", // Sherpa Blue
-				"UPSCALE_MODEL": "#4A004A", // Tyrian Purple
-				"VAE": "#4F394F", // Loulou
+				"CLIP": "#2AB7CA", // light blue
+				"CLIP_VISION": "#6c71c4", // blue violet
+				"CLIP_VISION_OUTPUT": "#859900", // olive green
+				"CONDITIONING": "#d33682", // magenta
+				"CONTROL_NET": "#d1ffd7", // light mint green
+				"IMAGE": "#5940bb", // deep blue violet
+				"LATENT": "#268bd2", // blue
+				"MASK": "#CCC9E7", // light purple-gray
+				"MODEL": "#dc322f", // red
+				"STYLE_MODEL": "#1a998a", // teal
+				"UPSCALE_MODEL": "#054A29", // dark green
+				"VAE": "#facfad", // light pink-orange
+			},
+			"litegraph_base": {
+				"NODE_TITLE_COLOR": "#fdf6e3", // Base3
+				"NODE_SELECTED_TITLE_COLOR": "#A9D400",
+				"NODE_TEXT_SIZE": 14,
+				"NODE_TEXT_COLOR": "#657b83", // Base00
+				"NODE_SUBTEXT_SIZE": 12,
+				"NODE_DEFAULT_COLOR": "#094656",
+				"NODE_DEFAULT_BGCOLOR": "#073642", // Base02
+				"NODE_DEFAULT_BOXCOLOR": "#839496", // Base0
+				"NODE_DEFAULT_SHAPE": "box",
+				"NODE_BOX_OUTLINE_COLOR": "#fdf6e3", // Base3
+				"DEFAULT_SHADOW_COLOR": "rgba(0,0,0,0.5)",
+				"DEFAULT_GROUP_FONT": 24,
+
+				"WIDGET_BGCOLOR": "#002b36", // Base03
+				"WIDGET_OUTLINE_COLOR": "#839496", // Base0
+				"WIDGET_TEXT_COLOR": "#fdf6e3", // Base3
+				"WIDGET_SECONDARY_TEXT_COLOR": "#93a1a1", // Base1
+
+				"LINK_COLOR": "#2aa198", // Solarized Cyan
+				"EVENT_LINK_COLOR": "#268bd2", // Solarized Blue
+				"CONNECTING_LINK_COLOR": "#859900", // Solarized Green
+			},
+			"comfy_base": {
+				"fg-color": "#fdf6e3", // Base3
+				"bg-color": "#002b36", // Base03
+				"comfy-menu-bg": "#073642", // Base02
+				"comfy-input-bg": "#002b36", // Base03
+				"input-text": "#93a1a1", // Base1
+				"descrip-text": "#586e75", // Base01
+				"drag-text": "#839496", // Base0
+				"error-text": "#dc322f", // Solarized Red
+				"border-color": "#657b83" // Base00
 			}
-		}
-	},
-	"takoyaro_palette": {
-		"id": "takoyaro_palette",
-		"name": "Takoyaro Palette",
-		"colors": {
-			"node_slot": {
-				"CLIP": "#E8CE23", 
-				"CLIP_VISION": "#DA7822", 
-				"CLIP_VISION_OUTPUT": "#B44500", 
-				"CONDITIONING": "#9D5AE0", 
-				"CONTROL_NET": "#20E4B0", 
-				"IMAGE": "#5164DF", 
-				"LATENT": "#F76397", 
-				"MASK": "#ABA8E6", 
-				"MODEL": "#E100FF", 
-				"STYLE_MODEL": "#E0A5E3", 
-				"VAE": "#5BF656", 
-				"RAW_TEXT": "#987B89", 
-				"NUMBER": "#408994", 
-				"BOOLEAN": "#B55959", 
-				"FLOAT": "#949C47", 
-			}
-		}
-	},
+		},
+	}
 };
 
 const id = "Comfy.ColorPalette";
 const idCustomColorPalettes = "Comfy.CustomColorPalettes";
-const defaultColorPaletteId = "palette_1";
+const defaultColorPaletteId = "dark";
 const els = {}
 // const ctxMenu = LiteGraph.ContextMenu;
 app.registerExtension({
@@ -217,10 +292,12 @@ app.registerExtension({
 		const loadColorPalette = async (colorPalette) => {
 			colorPalette = await completeColorPalette(colorPalette);
 			if (colorPalette.colors) {
+				// Sets the colors of node slots and links
 				if (colorPalette.colors.node_slot) {
 					Object.assign(app.canvas.default_connection_color_byType, colorPalette.colors.node_slot);
 					Object.assign(LGraphCanvas.link_type_colors, colorPalette.colors.node_slot);
 				}
+				// Sets the colors of the LiteGraph objects
 				if (colorPalette.colors.litegraph_base) {
 					// Everything updates correctly in the loop, except the Node Title and Link Color for some reason
 					app.canvas.node_title_color = colorPalette.colors.litegraph_base.NODE_TITLE_COLOR;
@@ -230,6 +307,13 @@ app.registerExtension({
 						if (colorPalette.colors.litegraph_base.hasOwnProperty(key) && LiteGraph.hasOwnProperty(key)) {
 							LiteGraph[key] = colorPalette.colors.litegraph_base[key];
 						}
+					}
+				}
+				// Sets the color of ComfyUI elements
+				if (colorPalette.colors.comfy_base) {
+					const rootStyle = document.documentElement.style;
+					for (const key in colorPalette.colors.comfy_base) {
+					  	rootStyle.setProperty('--' + key, colorPalette.colors.comfy_base[key]);
 					}
 				}
 				app.canvas.draw(true, true);

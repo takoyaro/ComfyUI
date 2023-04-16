@@ -10,64 +10,54 @@ function getNumberDefaults(inputData, defaultStep) {
 	return { val: defaultVal, config: { min, max, step: 10.0 * step } };
 }
 
-export function addRandomizeWidget(node, targetWidget, name, defaultValue = false, input_type="INT") {
-	const randomize = node.addWidget("toggle", name, defaultValue, function (v) {}, {
-		on: "enabled",
-		off: "disabled",
-		serialize: false, // Don't include this in prompt.
-	});
+export function addValueControlWidget(node, targetWidget, defaultValue = "randomize", values) {
+    const valueControl = node.addWidget("combo", "control_after_generate", defaultValue, function (v) { }, {
+        values: ["fixed", "increment", "decrement", "randomize"],
+        serialize: false, // Don't include this in prompt.
+    });
+    valueControl.afterQueued = () => {
 
-	randomize.afterQueued = () => {
-		if (randomize.value) {
-			if (input_type === "INT") {
-				const min = 0;
-				let max = targetWidget.options?.max;
-				if (max != null) {
-					if (max) {
-						// limit max to something that javascript can handle
-						max = Math.min(1125899906842624, max);
-					}
-					targetWidget.value = Math.floor(Math.random() * ((max ?? 9999999999) - (min ?? 0) + 1) + (min ?? 0));
-				} else {
-					targetWidget.value = Math.floor(Math.random() * 1125899906842624);
-				}
-			}
-			else if (input_type === "FLOAT") {
-				const min = targetWidget.options?.min;
-				let max = targetWidget.options?.max;
-				if (min != null || max != null) {
-					targetWidget.value = Math.random() * (max - min) + min;
-				} else {
-					targetWidget.value = Math.random();
-				}
-			}
-			else if (input_type == "BOOL") {
-				targetWidget.value = Math.random() > 0.5;
-			}
-			else if (input_type == "COMBO"){
-				const arr = targetWidget.options.values;
-				targetWidget.value = arr[Math.floor(Math.random() * arr.length)];
-			}
-			
+		var v = valueControl.value;
+
+		let min = targetWidget.options.min;
+		let max = targetWidget.options.max;
+		// limit to something that javascript can handle
+		max = Math.min(1125899906842624, max);
+		min = Math.max(-1125899906842624, min);
+		let range = (max - min) / (targetWidget.options.step / 10);
+
+		//adjust values based on valueControl Behaviour
+		switch (v) {
+			case "fixed":
+				break;
+			case "increment":
+				targetWidget.value += targetWidget.options.step / 10;
+				break;
+			case "decrement":
+				targetWidget.value -= targetWidget.options.step / 10;
+				break;
+			case "randomize":
+				targetWidget.value = Math.floor(Math.random() * range) * (targetWidget.options.step / 10) + min;
+			default:
+				break;
 		}
-	};
-	return randomize;
-}
+	/*check if values are over or under their respective
+	 * ranges and set them to min or max.*/
+		if (targetWidget.value < min)
+			targetWidget.value = min;
+
+		if (targetWidget.value > max)
+			targetWidget.value = max;
+	}
+	return valueControl;	
+};
 
 function seedWidget(node, inputName, inputData) {
 	const seed = ComfyWidgets.INT(node, inputName, inputData);
-	const randomize = addRandomizeWidget(node, seed.widget, "Randomize after every gen", true);
+	const seedControl = addValueControlWidget(node, seed.widget, "randomize");
 
-	seed.widget.linkedWidgets = [randomize];
-	return { widget: seed, randomize };
-}
-
-function randomFloatWidget(node, inputName, inputData) {
-	const seed = ComfyWidgets.FLOAT(node, inputName, inputData);
-	const randomize = addRandomizeWidget(node, seed.widget, "Randomize after every gen", true, "FLOAT");
-
-	seed.widget.linkedWidgets = [randomize];
-	return { widget: seed, randomize };
+	seed.widget.linkedWidgets = [seedControl];
+	return seed;
 }
 
 const MultilineSymbol = Symbol();
