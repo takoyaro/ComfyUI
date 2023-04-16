@@ -22,10 +22,11 @@ const colorPalettes = {
 				"STYLE_MODEL": "#C2FFAE", 
 				"VAE": "#FF6E6E", 
 				"STRING": "#FF6E6E", 
+				"RAW_TEXT": "#FF6E6E", 
 				"NUMBER": "#FF6E6E", 
 				"BOOLEAN": "#FF6E6E", 
 				"FLOAT": "#FF6E6E", 
-			}
+			},
 			"comfy_base": {
 				"fg-color": "#fff",
 				"bg-color": "#202020",
