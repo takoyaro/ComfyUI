@@ -3,6 +3,27 @@ import torch
 import comfy.samplers
 import model_management
 
+def process_prompts(positive, negative, device, noise):
+    positive_copy = []
+    negative_copy = []
+    control_nets = []
+    for p in positive:
+        t = p[0]
+        if t.shape[0] < noise.shape[0]:
+            t = torch.cat([t] * noise.shape[0])
+        t = t.to(device)
+        if 'control' in p[1]:
+            control_nets += [p[1]['control']]
+        positive_copy += [[t] + p[1:]]
+    for n in negative:
+        t = n[0]
+        if t.shape[0] < noise.shape[0]:
+            t = torch.cat([t] * noise.shape[0])
+        t = t.to(device)
+        if 'control' in n[1]:
+            control_nets += [n[1]['control']]
+        negative_copy += [[t] + n[1:]]
+    return positive_copy, negative_copy, control_nets
 
 def common_ksampler(model, seed, steps, cfg, sampler_name, scheduler, positive, negative, latent, denoise=1.0, disable_noise=False, start_step=None, last_step=None, force_full_denoise=False):
     latent_image = latent["samples"]
@@ -31,28 +52,9 @@ def common_ksampler(model, seed, steps, cfg, sampler_name, scheduler, positive, 
     noise2 = noise2.to(device)
 
     latent_image = latent_image.to(device)
-    latent_image2 = latent_image2.to(device)
+    latent_image2 = latent_image.to(device)
 
-    positive_copy = []
-    negative_copy = []
-
-    control_nets = []
-    for p in positive:
-        t = p[0]
-        if t.shape[0] < noise.shape[0]:
-            t = torch.cat([t] * noise.shape[0])
-        t = t.to(device)
-        if 'control' in p[1]:
-            control_nets += [p[1]['control']]
-        positive_copy += [[t] + p[1:]]
-    for n in negative:
-        t = n[0]
-        if t.shape[0] < noise.shape[0]:
-            t = torch.cat([t] * noise.shape[0])
-        t = t.to(device)
-        if 'control' in n[1]:
-            control_nets += [n[1]['control']]
-        negative_copy += [[t] + n[1:]]
+    positive_copy,negative_copy,control_nets = process_prompts(positive, negative,device, noise)
 
     control_net_models = []
     for x in control_nets:
