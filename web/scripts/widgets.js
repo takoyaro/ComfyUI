@@ -213,6 +213,28 @@ function addMultilineWidget(node, name, opts, app) {
 	return { minWidth: 400, minHeight: 200, widget };
 }
 
+export function addRandomizeWidget(node, targetWidget, name, defaultValue = false, input_type="INT") {
+	const randomize = node.addWidget("toggle", name, defaultValue, function (v) {}, {
+		on: "enabled",
+		off: "disabled",
+		serialize: false, // Don't include this in prompt.
+	});
+
+	randomize.afterQueued = () => {
+		if (randomize.value) {
+			if (input_type == "BOOL") {
+				targetWidget.value = Math.random() > 0.5;
+			}
+			else if (input_type == "COMBO"){
+				const arr = targetWidget.options.values;
+				targetWidget.value = arr[Math.floor(Math.random() * arr.length)];
+			}
+			
+		}
+	};
+	return randomize;
+}
+
 export const ComfyWidgets = {
 	"INT:seed": seedWidget,
 	"INT:noise_seed": seedWidget,
@@ -254,7 +276,7 @@ export const ComfyWidgets = {
 		if (inputData[1] && inputData[1].default) {
 			defaultValue = inputData[1].default;
 		}
-		console.log("COMBO IS ", inputName, inputData);
+		
 		const targetWidget = { widget: node.addWidget("combo", inputName, defaultValue, () => {}, { values: type }) };
 
 		const randomize = addRandomizeWidget(node, targetWidget.widget, "Randomize after every gen", true, "COMBO");
