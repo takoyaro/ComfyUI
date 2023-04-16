@@ -217,7 +217,6 @@ export const ComfyWidgets = {
 	"INT:seed": seedWidget,
 	"INT:noise_seed": seedWidget,
 	"INT:_int": seedWidget,
-	"FLOAT:_float": randomFloatWidget,
 	FLOAT(node, inputName, inputData) {
 		const { val, config } = getNumberDefaults(inputData, 0.5);
 		return { widget: node.addWidget("number", inputName, val, () => {}, config) };
