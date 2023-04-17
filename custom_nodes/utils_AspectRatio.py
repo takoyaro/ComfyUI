@@ -49,6 +49,7 @@ class AspectRatioToResolution:
     def get_resolution(self,Shortest_Side,Aspect_Ratio):
         Width = 512
         Height = 512
+        pixel_multiplier = 64
         if Aspect_Ratio < 1.0:
             Width = Shortest_Side
             Height = int(Width / Aspect_Ratio)
@@ -56,12 +57,12 @@ class AspectRatioToResolution:
             Height = Shortest_Side
             Width = int(Height * Aspect_Ratio)
         
-        if Width/4 % 2 != 0:
-            #Width is equal to closest multiple of 4
-            Width = int(Width/4)*4
-        if Height/4 % 2 != 0:
-            #Height is equal to closest multiple of 2
-            Height = int(Height/2)*2
+        if Width/pixel_multiplier % 2 != 0:
+            #Width is equal to next multiple of 64
+            Width = int(Width/pixel_multiplier)*pixel_multiplier+pixel_multiplier
+        if Height/pixel_multiplier % 2 != 0:
+            #Height is equal to next multiple of 8
+            Height = int(Height/pixel_multiplier)*pixel_multiplier+pixel_multiplier
 
         print(f'Width: {Width}, Height: {Height}, Aspect Ratio: {Aspect_Ratio}')
         return (Width,Height,)
