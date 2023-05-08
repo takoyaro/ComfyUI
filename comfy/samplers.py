@@ -541,7 +541,7 @@ class KSampler:
             sigmas = self.calculate_sigmas(new_steps).to(self.device)
             self.sigmas = sigmas[-(steps + 1):]
 
-    def sample(self, noise, positive, negative, cfg, latent_image=None, start_step=None, last_step=None, force_full_denoise=False, denoise_mask=None, sigmas=None, callback=None):
+    def sample(self, noise, positive, negative, cfg, latent_image=None, start_step=None, last_step=None, force_full_denoise=False, denoise_mask=None, sigmas=None, callback=None, disable_pbar=False):
         if sigmas is None:
             sigmas = self.sigmas
         sigma_min = self.sigma_min
@@ -610,9 +610,9 @@ class KSampler:
 
         with precision_scope(model_management.get_autocast_device(self.device)):
             if self.sampler == "uni_pc":
-                samples = uni_pc.sample_unipc(self.model_wrap, noise, latent_image, sigmas, sampling_function=sampling_function, max_denoise=max_denoise, extra_args=extra_args, noise_mask=denoise_mask, callback=callback)
+                samples = uni_pc.sample_unipc(self.model_wrap, noise, latent_image, sigmas, sampling_function=sampling_function, max_denoise=max_denoise, extra_args=extra_args, noise_mask=denoise_mask, callback=callback, disable=disable_pbar)
             elif self.sampler == "uni_pc_bh2":
-                samples = uni_pc.sample_unipc(self.model_wrap, noise, latent_image, sigmas, sampling_function=sampling_function, max_denoise=max_denoise, extra_args=extra_args, noise_mask=denoise_mask, callback=callback, variant='bh2')
+                samples = uni_pc.sample_unipc(self.model_wrap, noise, latent_image, sigmas, sampling_function=sampling_function, max_denoise=max_denoise, extra_args=extra_args, noise_mask=denoise_mask, callback=callback, variant='bh2', disable=disable_pbar)
             elif self.sampler == "ddim":
                 timesteps = []
                 for s in range(sigmas.shape[0]):
@@ -623,7 +623,8 @@ class KSampler:
 
                 ddim_callback = None
                 if callback is not None:
-                    ddim_callback = lambda pred_x0, i: callback(i, pred_x0, None)
+                    total_steps = len(timesteps) - 1
+                    ddim_callback = lambda pred_x0, i: callback(i, pred_x0, None, total_steps)
 
                 sampler = DDIMSampler(self.model, device=self.device)
                 sampler.make_schedule_timesteps(ddim_timesteps=timesteps, verbose=False)
@@ -643,7 +644,8 @@ class KSampler:
                                                      extra_args=extra_args,
                                                      mask=noise_mask,
                                                      to_zero=sigmas[-1]==0,
-                                                     end_step=sigmas.shape[0] - 1)
+                                                     end_step=sigmas.shape[0] - 1,
+                                                     disable_pbar=disable_pbar)
 
             else:
                 extra_args["denoise_mask"] = denoise_mask
@@ -653,16 +655,17 @@ class KSampler:
                 noise = noise * sigmas[0]
 
                 k_callback = None
+                total_steps = len(sigmas) - 1
                 if callback is not None:
-                    k_callback = lambda x: callback(x["i"], x["denoised"], x["x"])
+                    k_callback = lambda x: callback(x["i"], x["denoised"], x["x"], total_steps)
 
                 if latent_image is not None:
                     noise += latent_image
                 if self.sampler == "dpm_fast":
-                    samples = k_diffusion_sampling.sample_dpm_fast(self.model_k, noise, sigma_min, sigmas[0], self.steps, extra_args=extra_args, callback=k_callback)
+                    samples = k_diffusion_sampling.sample_dpm_fast(self.model_k, noise, sigma_min, sigmas[0], total_steps, extra_args=extra_args, callback=k_callback, disable=disable_pbar)
                 elif self.sampler == "dpm_adaptive":
-                    samples = k_diffusion_sampling.sample_dpm_adaptive(self.model_k, noise, sigma_min, sigmas[0], extra_args=extra_args, callback=k_callback)
+                    samples = k_diffusion_sampling.sample_dpm_adaptive(self.model_k, noise, sigma_min, sigmas[0], extra_args=extra_args, callback=k_callback, disable=disable_pbar)
                 else:
-                    samples = getattr(k_diffusion_sampling, "sample_{}".format(self.sampler))(self.model_k, noise, sigmas, extra_args=extra_args, callback=k_callback)
+                    samples = getattr(k_diffusion_sampling, "sample_{}".format(self.sampler))(self.model_k, noise, sigmas, extra_args=extra_args, callback=k_callback, disable=disable_pbar)
 
         return samples.to(torch.float32)
