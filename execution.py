@@ -147,7 +147,7 @@ class PromptExecutor:
         self.old_prompt = {}
         self.server = server
 
-    def execute(self, prompt, extra_data={}):
+    def execute(self, prompt, prompt_id, extra_data={}, execute_outputs=[]):
         nodes.interrupt_processing(False)
 
         if "client_id" in extra_data:
@@ -169,32 +169,29 @@ class PromptExecutor:
                 recursive_output_delete_if_changed(prompt, self.old_prompt, self.outputs, x)
 
             current_outputs = set(self.outputs.keys())
+            if self.server.client_id is not None:
+                self.server.send_sync("execution_cached", { "nodes": list(current_outputs) , "prompt_id": prompt_id}, self.server.client_id)
             executed = set()
             try:
                 to_execute = []
-                for x in prompt:
-                    class_ = nodes.NODE_CLASS_MAPPINGS[prompt[x]['class_type']]
-                    if hasattr(class_, 'OUTPUT_NODE'):
-                        to_execute += [(0, x)]
+                for x in list(execute_outputs):
+                    to_execute += [(0, x)]
 
                 while len(to_execute) > 0:
                     #always execute the output that depends on the least amount of unexecuted nodes first
                     to_execute = sorted(list(map(lambda a: (len(recursive_will_execute(prompt, self.outputs, a[-1])), a[-1]), to_execute)))
                     x = to_execute.pop(0)[-1]
 
-                    class_ = nodes.NODE_CLASS_MAPPINGS[prompt[x]['class_type']]
-                    if hasattr(class_, 'OUTPUT_NODE'):
-                        if class_.OUTPUT_NODE == True:
-                            valid = False
-                            try:
-                                m = validate_inputs(prompt, x)
-                                valid = m[0]
-                            except:
-                                valid = False
-                            if valid:
-                                recursive_execute(self.server, prompt, self.outputs, x, extra_data, executed)
+                    recursive_execute(self.server, prompt, self.outputs, x, extra_data, executed)
             except Exception as e:
-                print(traceback.format_exc())
+                if isinstance(e, comfy.model_management.InterruptProcessingException):
+                    print("Processing interrupted")
+                else:
+                    message = str(traceback.format_exc())
+                    print(message)
+                    if self.server.client_id is not None:
+                        self.server.send_sync("execution_error", { "message": message, "prompt_id": prompt_id }, self.server.client_id)
+
                 to_delete = []
                 for o in self.outputs:
                     if (o not in current_outputs) and (o not in executed):
@@ -210,14 +207,17 @@ class PromptExecutor:
                     self.old_prompt[x] = copy.deepcopy(prompt[x])
                 self.server.last_node_id = None
                 if self.server.client_id is not None:
-                    self.server.send_sync("executing", { "node": None }, self.server.client_id)
+                    self.server.send_sync("executing", { "node": None, "prompt_id": prompt_id }, self.server.client_id)
 
         gc.collect()
         comfy.model_management.soft_empty_cache()
 
 
-def validate_inputs(prompt, item):
+def validate_inputs(prompt, item, validated):
     unique_id = item
+    if unique_id in validated:
+        return validated[unique_id]
+
     inputs = prompt[unique_id]['inputs']
     class_type = prompt[unique_id]['class_type']
     obj_class = nodes.NODE_CLASS_MAPPINGS[class_type]
@@ -238,8 +238,9 @@ def validate_inputs(prompt, item):
             r = nodes.NODE_CLASS_MAPPINGS[o_class_type].RETURN_TYPES
             if r[val[1]] != type_input:
                 return (False, "Return type mismatch. {}, {}, {} != {}".format(class_type, x, r[val[1]], type_input))
-            r = validate_inputs(prompt, o_id)
+            r = validate_inputs(prompt, o_id, validated)
             if r[0] == False:
+                validated[o_id] = r
                 return r
         else:
             if type_input == "INT":
@@ -267,7 +268,10 @@ def validate_inputs(prompt, item):
                 if isinstance(type_input, list):
                     if val not in type_input:
                         return (False, "Value not in list. {}, {}: {} not in {}".format(class_type, x, val, type_input))
-    return (True, "")
+
+    ret = (True, "")
+    validated[unique_id] = ret
+    return ret
 
 def validate_prompt(prompt):
     outputs = set()
@@ -281,11 +285,12 @@ def validate_prompt(prompt):
 
     good_outputs = set()
     errors = []
+    validated = {}
     for o in outputs:
         valid = False
         reason = ""
         try:
-            m = validate_inputs(prompt, o)
+            m = validate_inputs(prompt, o, validated)
             valid = m[0]
             reason = m[1]
         except Exception as e:
@@ -294,7 +299,7 @@ def validate_prompt(prompt):
             reason = "Parsing error"
 
         if valid == True:
-            good_outputs.add(x)
+            good_outputs.add(o)
         else:
             print("Failed to validate prompt for output {} {}".format(o, reason))
             print("output will be ignored")
@@ -304,7 +309,7 @@ def validate_prompt(prompt):
         errors_list = "\n".join(set(map(lambda a: "{}".format(a[1]), errors)))
         return (False, "Prompt has no properly connected outputs\n {}".format(errors_list))
 
-    return (True, "")
+    return (True, "", list(good_outputs))
 
 
 class PromptQueue:
